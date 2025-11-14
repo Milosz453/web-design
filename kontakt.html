@@ -1,24 +1,72 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio-Miłosz Kaczor</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kontakt - Miłosz Kaczor</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { transition: .3s; }
+body.dark-mode { background:#121212; color:white; }
+body.dark-mode input,body.dark-mode textarea { background:#1f1f1f; color:white; border-color:#444; }
+body.dark-mode .nav-button { background:#333 !important;color:white !important; }
+#theme-toggle {
+position:fixed;top:10px;right:10px;padding:8px 12px;border:none;border-radius:20px;
+background:#667eea;color:white;cursor:pointer;
+}
+.contact-container{max-width:600px;margin:40px auto;padding:10px;}
+input,textarea{width:100%;padding:8px;margin-top:4px;border-radius:4px;}
+.error{color:#c20000;font-size:14px;margin-top:3px;}
+.submit-btn{margin-top:12px;padding:10px 14px;background:#667eea;color:white;border:none;border-radius:6px;cursor:pointer;}
+</style>
 </head>
-
 <body>
-    <main class="profile--section">
-     <div class="profile-contener">
-    <h1 class="profile-name">Miłosz Kaczor</h1>
-    <h2>telefon +48 142 432 567</h2>
-    <h3>Gmail kaczormilosz432@gmail.com</h3>
-     </div>
-    </main>
-
-    <nav class="navigation">
-        <a href="index.html" class="nav-button">Strona Główna</a>
-    </nav>
+<button id="theme-toggle">🌙 Tryb ciemny</button>
+<main class="contact-container">
+<h1>Kontakt</h1>
+<h2>Miłosz Kaczor</h2>
+<h3>Telefon: +48 142 432 567</h3>
+<h3>Email: kaczormilosz432@gmail.com</h3>
+<form id="contactForm">
+<label>Imię</label>
+<input id="name">
+<div id="name-error" class="error"></div>
+<label>Email</label>
+<input id="email">
+<div id="email-error" class="error"></div>
+<label>Wiadomość</label>
+<textarea id="message"></textarea>
+<div id="message-error" class="error"></div>
+<button class="submit-btn">Wyślij</button>
+</form>
+</main>
+<nav class="navigation">
+<a href="index.html" class="nav-button">Strona główna</a>
+<a href="umiejetnosci.html" class="nav-button">Umiejętności</a>
+</nav>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+const tgl=document.getElementById("theme-toggle");
+function apply(t){document.body.classList.toggle("dark-mode",t==="dark");tgl.textContent=t==="dark"?"☀️":"🌙";}
+apply(localStorage.getItem("theme"));
+tgl.addEventListener("click",()=>{const d=!document.body.classList.contains("dark-mode");localStorage.setItem("theme",d?"dark":"light");apply(d?"dark":"light")});
+const form=document.getElementById("contactForm");
+form.addEventListener("submit",function(e){
+e.preventDefault();
+let ok=true;
+const name=document.getElementById("name");
+const email=document.getElementById("email");
+const msg=document.getElementById("message");
+document.getElementById("name-error").textContent="";
+document.getElementById("email-error").textContent="";
+document.getElementById("message-error").textContent="";
+if(name.value.trim()===""){document.getElementById("name-error").textContent="To pole jest wymagane.";ok=false;}
+if(email.value.trim()===""){document.getElementById("email-error").textContent="To pole jest wymagane.";ok=false;}
+else if(!email.value.includes("@")){document.getElementById("email-error").textContent="Email musi zawierać @";ok=false;}
+if(msg.value.trim()===""){document.getElementById("message-error").textContent="To pole jest wymagane.";ok=false;}
+if(ok){alert("Wysłano!");form.reset();}
+});
+});
+</script>
 </body>
-
 </html>

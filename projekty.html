@@ -1,36 +1,95 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio-Miłosz Kaczor</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projekty - Miłosz Kaczor</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { transition:.3s; }
+body.dark-mode { background:#121212;color:white; }
+body.dark-mode .nav-button { background:#333 !important;color:white !important; }
+#theme-toggle {
+position:fixed;top:10px;right:10px;padding:8px 12px;border:none;border-radius:20px;
+background:#667eea;color:white;cursor:pointer;z-index:1000;
+}
+.projects-wrapper{max-width:900px;margin:40px auto;padding:10px;}
+.filter-buttons{text-align:center;margin-bottom:20px;}
+.filter-buttons button{padding:8px 14px;margin:4px;border:none;border-radius:6px;background:#764ba2;color:white;cursor:pointer;}
+.project-grid{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;}
+.project-card{width:260px;background:white;padding:15px;border-radius:8px;box-shadow:0 0 8px rgba(0,0,0,0.15);}
+body.dark-mode .project-card{background:#1f1f1f;color:white;}
+.slider-container{overflow:hidden;max-width:900px;margin:0 auto;border-radius:10px;}
+.slider-track{display:flex;transition:.5s;}
+.slide{min-width:100%;padding:40px;text-align:center;background:#f3f3f3;}
+body.dark-mode .slide{background:#1f1f1f;color:white;}
+.slider-controls{text-align:center;margin-top:10px;}
+.slider-controls button{padding:8px 14px;border:none;border-radius:6px;background:#667eea;color:white;cursor:pointer;}
+.slider-dots{text-align:center;margin-top:8px;}
+.slider-dots span{width:10px;height:10px;border-radius:50%;display:inline-block;margin:3px;background:#ccc;cursor:pointer;}
+.active-dot{background:#667eea !important;}
+</style>
 </head>
-
 <body>
-    <main class="profile--section">
-     <div class="profile-contener">
-       <h1>Moje Projekty</h1>
-      <br><br>
-    
-       <section id="projekty">
-      <p>Oto kilka projektów, nad którymi pracowałem w ramach nauki i pasji do informatyki.</p>
-
-  <div class="projekt">
-    <h2>Aplikacja</h2>
-    <p>Stworzyłem prostą aplikację webową do zarządzania zadaniami przy użyciu HTML, CSS i JavaScript. Umożliwia dodawanie, usuwanie i oznaczanie wykonanych zadań.</p>
-  </div>
-
-  <div class="projekt">
-    <h2> Strona Portfolio</h2>
-    <p>Moje osobiste portfolio, w którym prezentuję swoje umiejętności, projekty i zainteresowania. Projekt responsywny, wykonany w HTML5 i CSS3.</p>
-  </div>
-     </div>
-    </main>
-
-    <nav class="navigation">
-        <a href="index.html" class="nav-button">Strona Główna</a>
-    </nav>
+<button id="theme-toggle">🌙 Tryb ciemny</button>
+<div class="projects-wrapper">
+<h1>Moje Projekty</h1>
+<div class="slider-container" id="project-slider">
+<div class="slider-track">
+<div class="slide"><h2>Aplikacja do zadań</h2><p>Aplikacja webowa do zarządzania zadaniami.</p></div>
+<div class="slide"><h2>Portfolio</h2><p>Moja strona internetowa prezentująca projekty.</p></div>
+<div class="slide"><h2>Mini Sklep</h2><p>Prosty projekt sklepu online.</p></div>
+</div>
+</div>
+<div class="slider-controls">
+<button id="prev-slide">Poprzedni</button>
+<button id="next-slide">Następny</button>
+</div>
+<div class="slider-dots" id="slider-dots"></div>
+<div class="filter-buttons">
+<button data-filter="all">Wszystkie</button>
+<button data-filter="web">Web</button>
+<button data-filter="mobile">Mobile</button>
+<button data-filter="design">Design</button>
+</div>
+<div class="project-grid">
+<div class="project-card" data-category="web"><h2>Aplikacja</h2><p>Zarządzanie zadaniami w JS.</p></div>
+<div class="project-card" data-category="web"><h2>Portfolio</h2><p>Moja strona portfolio.</p></div>
+<div class="project-card" data-category="mobile"><h2>Aplikacja Mobilna</h2><p>Prototyp aplikacji.</p></div>
+<div class="project-card" data-category="design"><h2>Projekt UI</h2><p>Nowoczesny layout UI.</p></div>
+</div>
+</div>
+<nav class="navigation">
+<a href="index.html" class="nav-button">Strona Główna</a>
+<a href="umiejetnosci.html" class="nav-button">Umiejętności</a>
+</nav>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+const tgl=document.getElementById("theme-toggle");
+function apply(t){document.body.classList.toggle("dark-mode",t==="dark");tgl.textContent=t==="dark"?"☀️":"🌙";}
+apply(localStorage.getItem("theme"));
+tgl.addEventListener("click",()=>{const d=!document.body.classList.contains("dark-mode");
+localStorage.setItem("theme",d?"dark":"light");apply(d?"dark":"light")});
+const btns=document.querySelectorAll(".filter-buttons button");
+const cards=document.querySelectorAll(".project-card");
+btns.forEach(b=>b.addEventListener("click",()=>{const c=b.dataset.filter;
+cards.forEach(x=>x.style.display=(c==="all"||x.dataset.category===c)?"block":"none");}));
+const slider=document.querySelector(".slider-track");
+const slides=document.querySelectorAll(".slide");
+const prev=document.getElementById("prev-slide");
+const next=document.getElementById("next-slide");
+const dotsContainer=document.getElementById("slider-dots");
+let current=0;
+slides.forEach((_,i)=>{const d=document.createElement("span");d.dataset.index=i;if(i===0)d.classList.add("active-dot");dotsContainer.appendChild(d);});
+const dots=document.querySelectorAll(".slider-dots span");
+function update(){slider.style.transform=`translateX(-${current*100}%)`;dots.forEach(d=>d.classList.remove("active-dot"));dots[current].classList.add("active-dot");}
+next.addEventListener("click",()=>{current=(current+1)%slides.length;update();});
+prev.addEventListener("click",()=>{current=(current-1+slides.length)%slides.length;update();});
+dots.forEach(d=>d.addEventListener("click",()=>{current=parseInt(d.dataset.index);update();}));
+let auto=setInterval(()=>{current=(current+1)%slides.length;update();},5000);
+document.querySelector(".slider-container").addEventListener("mouseenter",()=>clearInterval(auto));
+document.querySelector(".slider-container").addEventListener("mouseleave",()=>auto=setInterval(()=>{current=(current+1)%slides.length;update();},5000));
+});
+</script>
 </body>
-
 </html>

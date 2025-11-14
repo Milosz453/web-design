@@ -1,26 +1,44 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio-Miłosz Kaczor</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O mnie - Miłosz Kaczor</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { transition:.3s; }
+body.dark-mode { background:#121212;color:white; }
+body.dark-mode .nav-button { background:#333 !important;color:white !important; }
+#theme-toggle{
+position:fixed;top:10px;right:10px;padding:8px 12px;border:none;border-radius:20px;
+background:#667eea;color:white;cursor:pointer;z-index:1000;
+}
+</style>
 </head>
-
 <body>
-    <main class="profile--section">
-     <div class="profile-contener">
-    <h1 class="profile-name">Miłosz Kaczor</h1>
-    <h2>Cześć! Nazywam się Miłosz, mam 18 lat i uczę się w szkole informatycznej, gdzie rozwijam swoją pasję do technologii i programowania.
-Interesuję się nowoczesnymi rozwiązaniami IT, tworzę własne projekty i ciągle poszukuję nowych wyzwań, które pozwolą mi się rozwijać.</h2>
-
-     </div>
-    </main>
-
-    <nav class="navigation">
-        <a href="projekty.html" class="nav-button">Projekty</a>
-        <a href="index.html" class="nav-button">Strona Główna</a>
-    </nav>
+<button id="theme-toggle">🌙 Tryb ciemny</button>
+<main class="profile--section">
+<div class="profile-contener">
+<h1 class="profile-name">Miłosz Kaczor</h1>
+<h2>
+Cześć! Nazywam się Miłosz, mam 18 lat i uczę się w szkole informatycznej, gdzie rozwijam swoją pasję do technologii i programowania.
+Interesuję się nowoczesnymi rozwiązaniami IT, tworzę własne projekty i ciągle poszukuję nowych wyzwań, które pozwolą mi się rozwijać.
+</h2>
+</div>
+</main>
+<nav class="navigation">
+<a href="projekty.html" class="nav-button">Projekty</a>
+<a href="umiejetnosci.html" class="nav-button">Umiejętności</a>
+<a href="index.html" class="nav-button">Strona główna</a>
+</nav>
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+const tgl=document.getElementById("theme-toggle");
+function apply(t){document.body.classList.toggle("dark-mode",t==="dark");tgl.textContent=t==="dark"?"☀️ Tryb jasny":"🌙 Tryb ciemny";}
+apply(localStorage.getItem("theme"));
+tgl.addEventListener("click",()=>{const d=!document.body.classList.contains("dark-mode");
+localStorage.setItem("theme",d?"dark":"light");apply(d?"dark":"light")});
+});
+</script>
 </body>
-
 </html>

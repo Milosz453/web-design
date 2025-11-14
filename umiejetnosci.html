@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Moje umiejętności - Miłosz Kaczor</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body { margin:0; font-family:Arial, sans-serif; transition:.3s; }
+body.dark-mode { background:#121212;color:white; }
+body.dark-mode .nav-button { background:#333 !important;color:white !important; }
+#theme-toggle{
+position:fixed;top:10px;right:10px;padding:8px 12px;border:none;border-radius:20px;
+background:#667eea;color:white;cursor:pointer;z-index:1000;
+}
+.layout {
+display:grid;
+grid-template-areas:
+"header header"
+"aside main"
+"footer footer";
+grid-template-columns: 250px 1fr;
+grid-template-rows: auto 1fr auto;
+min-height:100vh;
+}
+header {
+grid-area: header;
+padding:20px;
+background:#667eea;
+color:white;
+}
+body.dark-mode header{background:#273167;}
+aside {
+grid-area: aside;
+padding:20px;
+background:#f4f4f4;
+}
+body.dark-mode aside{background:#1f1f1f;}
+main {
+grid-area: main;
+padding:20px;
+}
+footer {
+grid-area: footer;
+padding:10px 20px;
+background:#eee;
+text-align:center;
+}
+body.dark-mode footer{background:#1b1b1b;}
+.nav-button {
+margin-right:10px;
+padding:8px 14px;
+border-radius:6px;
+background:#ffffff;
+color:#333;
+text-decoration:none;
+}
+header .nav-button{background:white;}
+body.dark-mode header .nav-button{background:#333;color:white;}
+.skills-intro {
+margin-bottom:20px;
+}
+.skills-container {
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+justify-content:center;
+margin-bottom:30px;
+}
+.skill-badge {
+padding:8px 16px;
+border-radius:20px;
+background:#667eea;
+color:white;
+font-size:14px;
+border:1px solid rgba(0,0,0,0.1);
+}
+body.dark-mode .skill-badge{
+background:#3a4bb8;
+border-color:#000;
+}
+.differences {
+max-width:600px;
+margin:0 auto;
+}
+.differences ul {
+padding-left:20px;
+}
+</style>
+</head>
+<body>
+<button id="theme-toggle">🌙 Tryb ciemny</button>
+<div class="layout">
+<header>
+<h1>Moje umiejętności</h1>
+<nav class="navigation">
+<a href="index.html" class="nav-button">Strona główna</a>
+<a href="o-mnie.html" class="nav-button">O mnie</a>
+<a href="projekty.html" class="nav-button">Projekty</a>
+<a href="kontakt.html" class="nav-button">Kontakt</a>
+<a href="umiejetnosci.html" class="nav-button">Umiejętności</a>
+</nav>
+</header>
+<aside>
+<h2>O stronie</h2>
+<p>Na tej stronie znajdziesz listę moich najważniejszych umiejętności technicznych oraz krótkie wyjaśnienie różnic między Flexbox a CSS Grid.</p>
+</aside>
+<main>
+<section class="skills-intro">
+<p>Jako uczeń technikum informatycznego rozwijam różne umiejętności związane z tworzeniem stron internetowych, programowaniem i pracą.</p>
+<p>Poniżej znajdują się technologie i narzędzia, z których najczęściej korzystam.</p>
+</section>
+<section class="skills-container">
+<div class="skill-badge">HTML</div>
+<div class="skill-badge">CSS</div>
+<div class="skill-badge">JavaScript</div>
+<div class="skill-badge">Git</div>
+<div class="skill-badge">GitHub</div>
+<div class="skill-badge">Responsywne strony</div>
+<div class="skill-badge">Testowanie</div>
+<div class="skill-badge">React (podstawy)</div>
+<div class="skill-badge">Node.js (podstawy)</div>
+<div class="skill-badge">Praca w zespole</div>
+</section>
+<section class="differences">
+<h2>Różnice między Flexbox a CSS Grid</h2>
+<ul>
+<li>Flexbox najlepiej sprawdza się w układach jednowymiarowych (w jednym rzędzie albo kolumnie), a CSS Grid w układach dwuwymiarowych (rzędy i kolumny jednocześnie).</li>
+<li>W Flexboxie główny nacisk kładzie się na rozkładanie elementów względem osi głównej, a w Gridzie projektuje się od razu cały „szkielet” strony z obszarami.</li>
+<li>CSS Grid pozwala łatwo definiować obszary za pomocą grid-template-areas, a w Flexboxie takiego podejścia z nazwanymi obszarami nie ma.</li>
+</ul>
+</section>
+</main>
+<footer>
+<p>Portfolio – Miłosz Kaczor</p>
+</footer>
+</div>
+<script>
+
+document.addEventListener("DOMContentLoaded",function(){
+
+const tgl=document.getElementById("theme-toggle");
+
+function apply(t){document.body.classList.toggle("dark-mode",t==="dark");tgl.textContent=t==="dark"?"☀️ Tryb jasny":"🌙 Tryb ciemny";}
+
+apply(localStorage.getItem("theme"));
+
+tgl.addEventListener("click",()=>{const d=!document.body.classList.contains("dark-mode");
+
+localStorage.setItem("theme",d?"dark":"light");apply(d?"dark":"light")});
+
+});
+</script>
+</body>
+</html>
+ 

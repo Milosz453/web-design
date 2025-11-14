@@ -1,25 +1,140 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio-Miłosz Kaczor</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio – Miłosz Kaczor</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body {
+   transition: background-color 0.3s ease, color 0.3s ease;
+}
+body.dark-mode {
+   background-color: #121212;
+   color: #f1f1f1;
+}
+body.dark-mode .nav-button {
+   background-color: #333 !important;
+   color: #fff !important;
+}
+#theme-toggle {
+   position: fixed;
+   top: 10px;
+   right: 10px;
+   padding: 8px 12px;
+   border: none;
+   border-radius: 20px;
+   cursor: pointer;
+   background-color: #667eea;
+   color: white;
+   z-index: 1000;
+}
+#scrollTopBtn {
+   position: fixed;
+   right: 20px;
+   bottom: 20px;
+   padding: 10px 15px;
+   border-radius: 6px;
+   border: none;
+   background: #333;
+   color: white;
+   font-size: 20px;
+   cursor: pointer;
+   display: none;
+}
+#weather-widget {
+   position: fixed;
+   top: 60px;
+   right: 10px;
+   padding: 8px 12px;
+   border-radius: 8px;
+   background: white;
+   box-shadow: 0 0 6px rgba(0,0,0,0.2);
+   z-index: 900;
+}
+body.dark-mode #weather-widget {
+   background: #1f1f1f;
+   color: white;
+}
+#typewriter {
+   font-size: 18px;
+   min-height: 28px;
+}
+.cursor {
+   display: inline-block;
+   width: 2px;
+   height: 20px;
+   background: currentColor;
+   margin-left: 3px;
+   animation: blink .8s infinite;
+}
+@keyframes blink {
+   0%, 50% { opacity: 1; }
+   51%, 100% { opacity: 0; }
+}
+</style>
 </head>
-
 <body>
-    <main class="profile--section">
-     <div class="profile-contener">
-        <img src="ladybug-9679907_640.jpg" alt="profilowe zdjęcie" class="profile-image">
-        <h1 class="profile-name">Miłosz Kaczor</h1>
-     </div>
-    </main>
-
-    <nav class="navigation">
-        <a href="o-mnie.html" class="nav-button">o mnie</a>
-        <a href="kontakt.html" class="nav-button">kontakt</a>
-    </nav>
-
+<button id="theme-toggle">🌙 Tryb ciemny</button>
+<div id="weather-widget">Ładowanie pogody...</div>
+<main class="profile-section" style="text-align:center;">
+<div class="profile-container">
+<img src="ladybug-9679907_640.jpg" class="profile-image">
+<h1 class="profile-name">Miłosz Kaczor</h1>
+<h2 id="typewriter"></h2>
+</div>
+</main>
+<nav class="navigation" style="text-align:center;margin-top:20px;">
+<a href="o-mnie.html" class="nav-button" id="o-mnie-btn">o mnie</a>
+<a href="kontakt.html" class="nav-button">kontakt</a>
+<a href="umiejetnosci.html" class="nav-button">umiejętności</a>
+</nav>
+<button id="scrollTopBtn">⬆️</button>
+<footer class="footer">
+<p id="current-datetime"></p>
+<p id="visit-counter"></p>
+<p>Copyright</p>
+</footer>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+   alert("Witam w mojej stronie portfolio!");
+   const btn = document.getElementById("o-mnie-btn");
+   const original = getComputedStyle(btn).backgroundColor;
+   btn.addEventListener("mouseenter",()=>btn.style.backgroundColor="#ff6b6b");
+   btn.addEventListener("mouseleave",()=>btn.style.backgroundColor=original);
+   const timeEl = document.getElementById("current-datetime");
+   function updateTime(){
+       const n=new Date(),p=n=>String(n).padStart(2,"0");
+       timeEl.textContent=`Dziś jest: ${p(n.getDate())}.${p(n.getMonth()+1)}.${n.getFullYear()}, godzina: ${p(n.getHours())}:${p(n.getMinutes())}:${p(n.getSeconds())}`;
+   }
+   updateTime(); setInterval(updateTime,1000);
+   const visitEl=document.getElementById("visit-counter");
+   let v=localStorage.getItem("visitCount");
+   if(v===null){ visitEl.textContent="Witaj po raz pierwszy!"; localStorage.setItem("visitCount","1"); }
+   else { v=parseInt(v)+1; visitEl.textContent=`To jest Twoja ${v} wizyta na tej stronie!`; localStorage.setItem("visitCount",v); }
+   const tgl=document.getElementById("theme-toggle");
+   function apply(t){ document.body.classList.toggle("dark-mode",t==="dark"); tgl.textContent=t==="dark"?"☀️ Tryb jasny":"🌙 Tryb ciemny"; }
+   apply(localStorage.getItem("theme"));
+   tgl.addEventListener("click",()=>{const dark=!document.body.classList.contains("dark-mode");localStorage.setItem("theme",dark?"dark":"light");apply(dark?"dark":"light")});
+   const tw=document.getElementById("typewriter");
+   const texts=["Web Developer","Uczeń technikum informatycznego","Pasjonat technologii"];
+   let ti=0,ci=0,del=false;
+   const cursor=document.createElement("span");cursor.className="cursor";tw.after(cursor);
+   function type(){
+       const t=texts[ti];
+       if(!del){ tw.textContent=t.slice(0,ci+1); ci++; if(ci===t.length){ setTimeout(()=>del=true,1500); }}
+       else { tw.textContent=t.slice(0,ci-1); ci--; if(ci===0){ del=false; ti=(ti+1)%texts.length; }}
+       setTimeout(type,del?70:110);
+   }
+   type();
+   const weather=document.getElementById("weather-widget");
+   fetch("https://wttr.in/?format=%l:+%C+%t")
+   .then(r=>r.text()).then(t=>weather.textContent="Pogoda: "+t)
+   .catch(()=>weather.textContent="Nie udało się pobrać pogody");
+   const scrollBtn=document.getElementById("scrollTopBtn");
+   window.addEventListener("scroll",()=>scrollBtn.style.display=window.pageYOffset>300?"block":"none");
+   scrollBtn.addEventListener("click",()=>window.scrollTo({top:0,behavior:"smooth"}));
+});
+</script>
 </body>
-
 </html>
